@@ -1,9 +1,11 @@
+import { DomainSwitcher } from './domain-switcher.js';
+
 function checkForDomainSet(tabId, changeInfo, tab) {
 	var activeSet = DomainSwitcher.getCurrentSet( tab );
 
 	if( activeSet ) {
 		if( activeSet.domains.length > 2 ) {
-			chrome.pageAction.setPopup({
+			chrome.action.setPopup({
 				tabId: tabId,
 				popup: "popup.html"
 			});

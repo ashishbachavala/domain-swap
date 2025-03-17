@@ -4,9 +4,10 @@ if( sets.length === 0 ) {
 	document.querySelector('#message').textContent = 'No Domain Sets Defined';
 }
 else {
-	chrome.tabs.getSelected(null, function (tab){
-		var hostname = DomainSwitcher.getHostname( tab ),
-			found_set = DomainSwitcher.getCurrentSet( tab );
+	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs){
+		var tab = tabs[0];
+		var hostname = DomainSwitcher.getHostname( tab );
+		var found_set = DomainSwitcher.getCurrentSet( tab );
 
 		if( found_set ) {
 			document.querySelector('#message').textContent = found_set.name;

@@ -39,22 +39,34 @@ function save_sets (forms) {
 	var i, form, sets = [];
 	for (i = 0; i < forms.length; ++i) {
 		form = forms[i];
-		sets.push(new DomainSet(form.querySelector('input').value, form.querySelector('textarea').value.split("\n")));
+		domainSet = {
+			name: form.querySelector('input').value || "",
+			domains: form.querySelector('textarea').value.split("\n")
+		}
+		sets.push(domainSet);
 	}
-	Storage.store(sets);
+	chrome.storage.local.set({domain_sets: sets});
 	flash_message('Saved!');
+}
+
+async function load () {
+	var result = await chrome.storage.local.get(["domain_sets"]);
+	if (!result || !result.domain_sets) {
+		return [];
+	}
+	return result.domain_sets;
 }
 
 /**
  * Load DomainSets from storage and add their forms to the document.
  */
-function restore_sets (target, template) {
-	var sets = Storage.load();
+async function restore_sets (target, template) {
+	var sets = await load();
 	sets.forEach(function (set, set_i) {
 		add_domain_set(target, template, set);
 	});
 }
 
-document.addEventListener('DOMContentLoaded', function () { restore_sets(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });
+document.addEventListener('DOMContentLoaded', async function () { restore_sets(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });
 document.querySelector('#save').addEventListener('click', function (e) { e.preventDefault(); save_sets(document.querySelectorAll('#domain_sets form')); });
 document.querySelector('#add_set').addEventListener('click', function (e) { e.preventDefault(); add_domain_set(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });

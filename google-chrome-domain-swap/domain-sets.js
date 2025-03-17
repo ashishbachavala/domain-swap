@@ -53,3 +53,5 @@ var DomainSet = function (name, domains) {
 
 	return this;
 };
+
+export { DomainSet };
