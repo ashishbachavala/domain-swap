@@ -4,10 +4,6 @@ async function checkForDomainSet(tabId, changeInfo, tab) {
 	var activeSet = await DomainSwitcher.getCurrentSet( tab );
 
 	if( activeSet ) {
-		// chrome.action.setPopup({
-		// 	tabId: tabId,
-		// 	popup: "popup.html"
-		// });
 		if( activeSet.domains.length > 2 ) {
 			chrome.action.setPopup({
 				tabId: tabId,
@@ -15,7 +11,6 @@ async function checkForDomainSet(tabId, changeInfo, tab) {
 			});
 		} else {
 			chrome.action.onClicked.addListener(function( tab ) {
-				// var set = DomainSwitcher.getCurrentSet( tab );
 				var hostname = DomainSwitcher.getHostname( tab );
 
 				activeSet.domains.forEach(function(domain, i) {
@@ -28,8 +23,6 @@ async function checkForDomainSet(tabId, changeInfo, tab) {
 				});
 			});
 		}
-
-		// chrome.pageAction.show( tabId );
 	}
 }
 
