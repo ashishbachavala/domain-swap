@@ -2,16 +2,7 @@ import { Storage } from './storage.js';
 
 var DomainSwitcher = {
 	getHostname: function( tab ) {
-		// console.log(tab.url);
 		return tab.url.split('/')[2];
-		// link.href = tab.url;
-		// return link.hostname + (("" === link.port) ? "" : ":" + link.port);
-	},
-	setUrl: function( hostname, port ) {
-		link.hostname = hostname;
-		link.port = port || ( link.protocol === 'https:' ? '443' : '80' );
-		return 'https://'+link.hostname+':'+link.port;
-		// return link.href;
 	},
 	getCurrentSet: async function( tab ) {
 		var found_set;

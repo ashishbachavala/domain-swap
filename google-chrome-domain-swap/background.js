@@ -1,23 +1,26 @@
 import { DomainSwitcher } from './domain-switcher.js';
 
-function checkForDomainSet(tabId, changeInfo, tab) {
-	var activeSet = DomainSwitcher.getCurrentSet( tab );
+async function checkForDomainSet(tabId, changeInfo, tab) {
+	var activeSet = await DomainSwitcher.getCurrentSet( tab );
 
 	if( activeSet ) {
+		// chrome.action.setPopup({
+		// 	tabId: tabId,
+		// 	popup: "popup.html"
+		// });
 		if( activeSet.domains.length > 2 ) {
 			chrome.action.setPopup({
 				tabId: tabId,
 				popup: "popup.html"
 			});
 		} else {
-			chrome.pageAction.onClicked.addListener(function( tab ) {
-				var set = DomainSwitcher.getCurrentSet( tab ),
-					hostname = DomainSwitcher.getHostname( tab );
+			chrome.action.onClicked.addListener(function( tab ) {
+				// var set = DomainSwitcher.getCurrentSet( tab );
+				var hostname = DomainSwitcher.getHostname( tab );
 
-				set.domains.forEach(function(domain, i) {
+				activeSet.domains.forEach(function(domain, i) {
 					if( hostname !== domain ) {
-						var parts = domain.split(':'),
-							newUrl = DomainSwitcher.setUrl( parts[ 0 ], parts[ 1 ] );
+						var newUrl = tab.url.replace(hostname, domain);
 
 						chrome.tabs.update(tabId, {url: newUrl});
 						return false;
@@ -26,7 +29,7 @@ function checkForDomainSet(tabId, changeInfo, tab) {
 			});
 		}
 
-		chrome.pageAction.show( tabId );
+		// chrome.pageAction.show( tabId );
 	}
 }
 

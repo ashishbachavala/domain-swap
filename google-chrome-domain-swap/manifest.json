@@ -10,6 +10,7 @@
 		"32": "icon-32x32.png",
 		"19": "icon-19x19.png"
 	},
+	"action": {},
 	"background": {
 		"service_worker": "background.js",
 		"type": "module"
