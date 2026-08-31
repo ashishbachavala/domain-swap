@@ -28,7 +28,7 @@ function add_domain_set (target, template, set) {
 		tmp_div.querySelector('input').value = set.name;
 		tmp_div.querySelector('textarea').value = set.domains.join("\n");
 	}
-	tmp_div.querySelector('button.delete_set').addEventListener('click', function (e) { e.preventDefault(); this.parentNode.remove(); });
+	tmp_div.querySelector('button.delete_set').addEventListener('click', function (e) { e.preventDefault(); mp.track('domain_set_deleted'); this.parentNode.remove(); });
 	target.appendChild(tmp_div.querySelector('form'));
 }
 
@@ -46,6 +46,7 @@ function save_sets (forms) {
 		sets.push(domainSet);
 	}
 	chrome.storage.local.set({domain_sets: sets});
+	mp.track('domain_set_saved', { set_count: sets.length });
 	flash_message('Saved!');
 }
 
@@ -69,4 +70,4 @@ async function restore_sets (target, template) {
 
 document.addEventListener('DOMContentLoaded', async function () { restore_sets(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });
 document.querySelector('#save').addEventListener('click', function (e) { e.preventDefault(); save_sets(document.querySelectorAll('#domain_sets form')); });
-document.querySelector('#add_set').addEventListener('click', function (e) { e.preventDefault(); add_domain_set(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });
+document.querySelector('#add_set').addEventListener('click', function (e) { e.preventDefault(); mp.track('domain_set_added'); add_domain_set(document.querySelector('#domain_sets'), document.querySelector('#domain_set_template')); });

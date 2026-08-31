@@ -42,6 +42,11 @@ async function setup_popup() {
 
 			if( found_set ) {
 				document.querySelector('#message').textContent = found_set.name;
+				mp.track('popup_opened', {
+					set_name: found_set.name,
+					domain_count: found_set.domains.length,
+					current_domain: hostname,
+				});
 				found_set.domains.forEach(function(domain, i) {
 					if( hostname !== domain ) {
 						var template = '<li><a href="#" data-domain="' + domain + '">' + domain + '</a></li>';
@@ -54,6 +59,11 @@ async function setup_popup() {
 						var newDomain = this.dataset.domain;
 						var newUrl = tab.url.replace(hostname, newDomain);
 
+						mp.track('domain_swapped', {
+							from_domain: hostname,
+							to_domain: newDomain,
+							set_name: found_set.name,
+						});
 						chrome.tabs.update(tab.id, {url: newUrl});
 						window.close();
 					});

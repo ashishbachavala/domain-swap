@@ -22,6 +22,7 @@
 	],
 	"host_permissions": [
 		"http://*.mixpanel.org/",
-		"http://*.mixpanel.com/"
+		"http://*.mixpanel.com/",
+		"https://api.mixpanel.com/*"
 	]
 }
